@@ -1,6 +1,8 @@
 {
     "name": "sameer1750/ag-grid-api",
     "description": "A package to generate ag-grid api",
+    "keywords": ["aggrid", "ag grid", "laravel ag grid", "aggrid api"],
+    "license": "MIT",
     "authors": [
         {
             "name": "Sameer Shaikh",
