@@ -10,6 +10,7 @@ Install this package and all the routes for your tables will be ready to use in 
 $ cd your-laravel-project
 $ composer require sameer1750/ag-grid-api
 ```
+Add Radix\Aggrid\AgGridApiServiceProvider::class, in config/app.php in the providers array.
 
 ### Example
 
