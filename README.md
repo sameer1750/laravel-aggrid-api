@@ -1,4 +1,4 @@
-# Laravel AgGrid
+# Laravel AgGrid - (Beta)
 
 A laravel package to create ag grid api on the go.
 
