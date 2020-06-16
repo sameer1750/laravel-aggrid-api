@@ -34,19 +34,15 @@ class AgGridApiController extends Controller
         $rowGroupCols = $request->rowGroupCols;
         $valueCols = $request->valueCols;
         $groupKeys = $request->groupKeys;
-        
-        if ($this->isDoingGrouping($rowGroupCols, $groupKeys)) {
+
+        if (count($valueCols)) {
             $colsToSelect = [];
 
-            $rowGroupCol = $rowGroupCols[count($groupKeys)];
-            $colsToSelect[] = $rowGroupCol.field;
+            foreach($valueCols as $v) {
+                $colsToSelect[] = $v['field'];
+            }
 
-            // TODO:: convert to php
-            // valueCols.forEach(function (valueCol) {
-            //     colsToSelect.push(valueCol.aggFunc . '(' . valueCol.field . ') as ' . valueCol.field);
-            // });
-
-            return ' select ' . $colsToSelect.implode(', ');
+            return ' select ' . join(', ', $colsToSelect). ' ';
         }
 
         return ' select *';
