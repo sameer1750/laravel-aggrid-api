@@ -1,6 +1,6 @@
 {
     "name": "sameer1750/ag-grid-api",
-    "version": "1.0.3",
+    "version": "1.0.5",
     "description": "A package to generate ag-grid api",
     "keywords": ["aggrid", "ag grid", "laravel ag grid", "aggrid api"],
     "license": "MIT",
