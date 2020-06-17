@@ -14,6 +14,7 @@ class AgGridApiServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->make('Radix\Aggrid\AgGridApiController');
+        $this->app->make('Radix\Aggrid\AgGridApiService');
     }
 
     /**
