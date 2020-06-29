@@ -82,11 +82,17 @@ class AgGridApiController extends Controller
                 return $this->createNumberFilterSql($key, $item);
             case 'date':
                 return $this->createDateFilterSql($key, $item);
+            case 'set':
+                return $this->createSetFilter($key, $item);
             default:
                 logger('unkonwn filter type: ' . $item['filterType']);
         }
     }
 
+    private function createSetFilter($key, $item) {
+        return $key .' in ('."'" . implode ( "', '", $item['values'] ) . "'".')';
+    }
+    
     private function createDateFilterSql($key, $item) {
         switch ($item['type']) {
             case 'equals':
