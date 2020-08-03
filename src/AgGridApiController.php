@@ -11,11 +11,24 @@ class AgGridApiController extends Controller
         $tableName = str_replace('-', '_', $tableName);
         $sql = $this->buildSql($tableName, $request);
 
+        $countSql = $this->countSql($tableName, $request);
+        
         $data = \DB::select($sql);
-
-        return ['data' => $data];
+        $totalCount = \DB::select($countSql);
+        
+        return ['data' => $data, 'count' => $totalCount[0]->cnt];
     }
     
+    private function countSql($tableName, $request) {
+
+        $selectSql = $this->createSelectSql($request, true);
+        $fromSql = " FROM $tableName ";
+        $whereSql = $this->createWhereSql($request);
+
+        $sql = $selectSql . $fromSql . $whereSql;
+        return $sql;
+    }
+
     private function buildSql($tableName, $request) {
 
         $selectSql = $this->createSelectSql($request);
@@ -30,11 +43,15 @@ class AgGridApiController extends Controller
         return $sql;
     }
 
-    private function createSelectSql($request) {
+    private function createSelectSql($request, $count = false) {
         $rowGroupCols = $request->rowGroupCols;
         $valueCols = $request->valueCols;
         $groupKeys = $request->groupKeys;
 
+        if ($count) {
+            return 'select count(*) as cnt';
+        }
+        
         if (count($valueCols)) {
             $colsToSelect = [];
 
