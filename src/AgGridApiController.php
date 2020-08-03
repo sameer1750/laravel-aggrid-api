@@ -77,7 +77,13 @@ class AgGridApiController extends Controller
     private function createFilterSql($key, $item) {
         switch ($item['filterType']) {
             case 'text':
-                return $this->createTextFilterSql($key, $item);
+                if ($item['filter'] === 'isnull') {
+                    return $this->createNullFilterSql($key);
+                } elseif ($item['filter'] === 'isnotnull') {
+                    return $this->createNotNullFilterSql($key);
+                } else {
+                    return $this->createTextFilterSql($key, $item);
+                }
             case 'number':
                 return $this->createNumberFilterSql($key, $item);
             case 'date':
@@ -87,6 +93,14 @@ class AgGridApiController extends Controller
             default:
                 logger('unkonwn filter type: ' . $item['filterType']);
         }
+    }
+    
+    public function createNullFilterSql($key) {
+        return $key . ' is NULL';
+    }
+
+    public function createNotNullFilterSql($key) {
+        return $key . ' is NOT NULL';
     }
 
     private function createSetFilter($key, $item) {
