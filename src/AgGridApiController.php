@@ -130,6 +130,11 @@ class AgGridApiController extends Controller
                 return $key . ' = "' . $item['dateFrom'] . '"';
             case 'notEqual':
                 return $key . ' != "' . $item['dateFrom'] . '"';
+            case 'inRange':
+                $toDate= $item['dateTo'];
+                $fromDate = $item['dateFrom'];
+                return " ( $key >= Date('$fromDate') AND $key <= Date('$toDate') ) ";
+                break;
             default:
                 logger('unknown text filter type: ' . $item['dateFrom']);
                 return 'true';
