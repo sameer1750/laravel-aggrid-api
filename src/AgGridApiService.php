@@ -114,20 +114,20 @@ class AgGridApiService {
         }
     }
 
-    public function createTextFilterSql($key, $item) {
+   public function createTextFilterSql($key, $item) {
         switch ($item['type']) {
             case 'equals':
-                return $key . ' = "' . $item['filter'] . '"';
+                return $key . ' = \'' . $item['filter'] . '\'';
             case 'notEqual':
-                return $key . ' != "' . $item['filter'] . '"';
+                return $key . ' != \'' . $item['filter'] . '\'';
             case 'contains':
-                return $key . ' like "%' . $item['filter'] . '%"';
+                return $key . ' like \'%' . $item['filter'] . '%\'';
             case 'notContains':
-                return $key . ' not like "%' . $item['filter'] . '%"';
+                return $key . ' not like \'%' . $item['filter'] . '%\'';
             case 'startsWith':
-                return $key . ' like "' . $item['filter'] . '%"';
+                return $key . ' like \'' . $item['filter'] . '%\'';
             case 'endsWith':
-                return $key . ' like "%' . $item['filter'] . '"';
+                return $key . ' like \'%' . $item['filter'] . '\'';
             default:
                 logger('unknown text filter type: ' . $item['type']);
                 return 'true';
