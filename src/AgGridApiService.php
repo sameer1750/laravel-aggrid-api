@@ -67,12 +67,16 @@ class AgGridApiService {
     public function createFilterSql($key, $item) {
         switch ($item['filterType']) {
             case 'text':
-                if ($item['filter'] === 'isnull') {
-                    return $this->createNullFilterSql($key);
-                } elseif ($item['filter'] === 'isnotnull') {
-                    return $this->createNotNullFilterSql($key);
+                if (isset($item['type']) AND $item['type'] == 'domainsFilter') {
+                    return $this->createDomainsFilterSql($key,$item['filter']);
                 } else {
-                    return $this->createTextFilterSql($key, $item);
+                    if ($item['filter'] === 'isnull') {
+                        return $this->createNullFilterSql($key);
+                    } elseif ($item['filter'] === 'isnotnull') {
+                        return $this->createNotNullFilterSql($key);
+                    } else {
+                        return $this->createTextFilterSql($key, $item);
+                    }
                 }
             case 'number':
                 return $this->createNumberFilterSql($key, $item);
@@ -85,6 +89,11 @@ class AgGridApiService {
         }
     }
 
+    public function createDomainsFilterSql($key, $item) {
+        $domains = array_map('trim', explode(',', $item));
+        return $key .' in ('."'" . implode ( "', '", $domains ) . "'".')';
+    }
+    
     public function createNullFilterSql($key) {
         return $key . ' is NULL';
     }
