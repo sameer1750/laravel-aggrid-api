@@ -31,16 +31,50 @@ class AgGridApiController extends Controller
 
     private function buildSql($tableName, $request) {
 
-        $selectSql = $this->createSelectSql($request);
+       $selectSql = $this->createSelectSql($request);
         $fromSql = "FROM $tableName ";
+        if ($request->join) {
+            $join = json_decode($request->join, true);
+            $selectSql = $this->addJoin($tableName,$join,$request);
+        }
         $whereSql = $this->createWhereSql($request);
         $limitSql = $this->createLimitSql($request);
 
         $orderBySql = $this->createOrderBySql($request);
         $groupBySql = $this->createGroupBySql($request);
 
-        $sql = $selectSql . $fromSql . $whereSql . $groupBySql . $orderBySql . $limitSql;
+        if ($request->join) {
+            $sql = $selectSql . $whereSql . $groupBySql . $orderBySql . $limitSql;
+        } else {
+            $sql = $selectSql . $fromSql . $whereSql . $groupBySql . $orderBySql . $limitSql;
+        }
+
         return $sql;
+    }
+    
+    private function addJoin($tableName,$joins,$request) {
+
+        $select = "select $tableName.* ";
+        foreach ($joins as $key =>$join) {
+            $table2 = $join['table'].$key;
+            $secondColumns = $join['select'];
+
+            $on = $join['on'];
+
+            $anotherColumn = explode('=',$on);
+            $anotherColumn = $anotherColumn[1];
+            $select .= " ,$table2.$secondColumns as $anotherColumn";
+        }
+        $select .= " FROM $tableName ";
+
+        foreach ($joins as $key=>$join) {
+            $table2 = $join['table'];
+            $on = $join['on'];
+            $select .= " LEFT JOIN $table2 as $table2$key on $on ";
+        }
+
+        return $select;
+
     }
 
     private function createSelectSql($request, $count = false) {
