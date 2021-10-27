@@ -8,7 +8,7 @@ class AgGridApiService {
 
         $selectSql = $this->createSelectSql($request);
         $fromSql = "FROM $tableName ";
-        if ($request->join) {
+        if (isset($request->join)) {
             $join = json_decode($request->join, true);
             $selectSql = $this->addJoin($tableName,$join,$request);
         }
@@ -19,7 +19,7 @@ class AgGridApiService {
         $orderBySql = $this->createOrderBySql($request);
         $groupBySql = $this->createGroupBySql($request);
 
-        if ($request->join) {
+        if (isset($request->join)) {
             $sql = $selectSql . $whereSql . $groupBySql . $orderBySql . $limitSql;
         } else {
             $sql = $selectSql . $fromSql . $whereSql . $groupBySql . $orderBySql ;
